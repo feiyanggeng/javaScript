@@ -1,15 +1,32 @@
-class student {
-  constructor(name, age) {
-    this.name = name,
-    this.age = age
+class Bus {
+  watcher= {}
+  watcherID= 0
+  addWatcher(fun) {
+    this.watcherID++
+    this.watcher[this.watcherID] = fun
   }
-  getName() {
-    return this.name
+  removeWatcher(id) {
+    delete this.watcher[id]
+  }
+  run() {
+    for (let w in this.watcher) {
+      this.watcher[w]();
+    }
   }
 }
 
-const s = new student("zhangsan", 12)
+let bus = new Bus();
 
-console.log(s);
+bus.addWatcher(() => {
+  console.log("hahaha")
+})
 
-console.log({...s});
+setInterval(() => {
+  bus.run()
+}, 1000);
+
+setTimeout(() => {
+  bus.addWatcher(() => {
+    console.log("heiheihei")
+  })
+}, 2000);

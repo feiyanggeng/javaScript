@@ -1,32 +1,26 @@
-class Bus {
-  watcher= {}
-  watcherID= 0
-  addWatcher(fun) {
-    this.watcherID++
-    this.watcher[this.watcherID] = fun
-  }
-  removeWatcher(id) {
-    delete this.watcher[id]
-  }
-  run() {
-    for (let w in this.watcher) {
-      this.watcher[w]();
+let pubSub = {
+  pubList: {},
+  // 订阅
+  subscribe: function(key, fn) {
+    if (this.pubList[key]) {
+      this.pubList[key].push(fn)
+    } else {
+      this.pubList[key] = [fn]
     }
+  },
+  // 发布
+  publish: function (key, ...args) {
+    this.pubList[key].forEach(fn => {
+      fn.call(this, ...args)
+    })
+  },
+  unSubscribe: function (key) {
+    
   }
 }
 
-let bus = new Bus();
+pubSub.subscribe('sayName', (name) => {
+  console.log(`my name is ${name}`)
+});
 
-bus.addWatcher(() => {
-  console.log("hahaha")
-})
-
-setInterval(() => {
-  bus.run()
-}, 1000);
-
-setTimeout(() => {
-  bus.addWatcher(() => {
-    console.log("heiheihei")
-  })
-}, 2000);
+pubSub.publish('sayName', 'zhangsan')
