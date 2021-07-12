@@ -15,7 +15,7 @@ let pubSub = {
     })
   },
   unSubscribe: function (key) {
-    
+    delete this.pubList[key]
   }
 }
 
